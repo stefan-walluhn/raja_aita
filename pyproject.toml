@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "raja_aita"
+version = "0.0.1"
+authors = [
+  { name="Stefan Walluhn", email="stefan@neuland.io" },
+]
+description = "Track and visualize device usage"
+readme = "README.md"
+dependencies = [
+    "fastapi",
+    "fastapi-cli",
+    "pydantic",
+    "pydantic-settings",
+    "tinydb",
+]
+
+[project.optional-dependencies]
+test = [
+    "flake8",
+    "flake8-bugbear",
+    "httpx",
+    "pytest",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
