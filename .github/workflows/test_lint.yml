@@ -25,5 +25,7 @@ jobs:
         pip install -c requirements.txt -e ".[test]"
     - name: "Lint with flake8"
       run: "flake8" 
+    - name: "Check types with mypy"
+      run: "mypy --strict src"
     - name: "Test with pytest"
       run: "pytest"

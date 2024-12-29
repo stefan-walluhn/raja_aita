@@ -8,7 +8,7 @@ from .repositories import Repository, TinyDBRepository
 class RepositoryFactory:
     _repository = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.settings = get_settings()
 
     def __call__(self) -> Repository:
