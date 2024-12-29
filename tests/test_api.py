@@ -43,7 +43,9 @@ def test_get_beacons(client, beacon):
 def test_patch_beacons(repository, client, beacon):
     beacon.uptime = timedelta(hours=2)
 
-    response = client.patch(f"/beacons/{beacon.uid}", json=beacon.model_dump(mode="json"))
+    response = client.patch(
+        f"/beacons/{beacon.uid}", json=beacon.model_dump(mode="json")
+    )
 
     assert response.status_code == 200
     assert repository.find_beacons(beacon.uid) == [beacon]

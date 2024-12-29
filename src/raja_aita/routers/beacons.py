@@ -19,11 +19,15 @@ async def get_beacons(
 
 @router.patch("/{uid}")
 async def patch_beacon(
-        uid: UUID4, beacon: Beacon, repository: Annotated[Repository, Depends(RepositoryFactory())]
+    uid: UUID4,
+    beacon: Beacon,
+    repository: Annotated[Repository, Depends(RepositoryFactory())],
 ) -> Beacon:
     # XXX dedicated beacon_in?
     if uid != beacon.uid:
-        raise HTTPException(status_code=403, detail="uid of route does not match beacon")
+        raise HTTPException(
+            status_code=403, detail="uid of route does not match beacon"
+        )
 
     repository.upsert_beacon(beacon)
     return beacon
