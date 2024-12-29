@@ -19,12 +19,19 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+client = [
+    "requests",
+]
 test = [
+    "raja_aita[client]",
     "flake8",
     "flake8-bugbear",
+    "freezegun",
     "httpx",
     "mypy",
     "pytest",
+    "requests-mock",
+    "types-requests",
 ]
 
 [tool.pytest.ini_options]
