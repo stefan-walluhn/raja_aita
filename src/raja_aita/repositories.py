@@ -7,12 +7,10 @@ from raja_aita.models import Beacon
 
 class Repository(metaclass=ABCMeta):
     @abstractmethod
-    def upsert_beacon(self, beacon: Beacon) -> None:
-        ...
+    def upsert_beacon(self, beacon: Beacon) -> None: ...
 
     @abstractmethod
-    def find_beacons(self, uid: UUID) -> list[Beacon]:
-        ...
+    def find_beacons(self, uid: UUID) -> list[Beacon]: ...
 
 
 class TinyDBRepository(Repository):
