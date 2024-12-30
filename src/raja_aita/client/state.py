@@ -3,8 +3,8 @@ from pydantic import BaseModel, AwareDatetime
 
 
 class State(BaseModel):
-    is_awake: bool = True
-    awake_since: AwareDatetime = datetime.now().astimezone()
+    is_awake: bool
+    awake_since: AwareDatetime
 
 
 class StateManager:

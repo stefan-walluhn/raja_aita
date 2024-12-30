@@ -6,7 +6,7 @@ from raja_aita.client.state import State, StateManager
 
 class TestStateManager:
     def test_sleep(self):
-        state = State(is_awake=True)
+        state = State(is_awake=True, awake_since=datetime.now().astimezone())
         state_manager = StateManager(state)
 
         state_manager.sleep()
