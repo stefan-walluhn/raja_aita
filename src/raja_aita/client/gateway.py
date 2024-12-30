@@ -12,10 +12,12 @@ class Gateway:
         self.url = url
 
     def patch_beacon(self, beacon: Beacon) -> None:
+        dumped_beacon = beacon.model_dump(mode="json")
+
         try:
             requests.patch(
-                "/".join([self.url, "beacons", str(beacon.uid)]),
-                json=beacon.model_dump(mode="json"),
+                "/".join([self.url, "beacons", dumped_beacon["uid"]]),
+                json=dumped_beacon,
                 timeout=30.0,
             )
         except requests.exceptions.RequestException as e:

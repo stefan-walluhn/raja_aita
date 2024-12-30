@@ -18,12 +18,12 @@ class TinyDBRepository(Repository):
         self.db = db
 
     def upsert_beacon(self, beacon: Beacon) -> None:
-        serialized_beacon = beacon.model_dump(mode="json")
+        dumped_beacon = beacon.model_dump(mode="json")
 
         self.db.upsert(
-            serialized_beacon,
-            (where("uid") == serialized_beacon["uid"])
-            & (where("dtstart") == serialized_beacon["dtstart"]),
+            dumped_beacon,
+            (where("uid") == dumped_beacon["uid"])
+            & (where("dtstart") == dumped_beacon["dtstart"]),
         )
 
     def find_beacons(self, uid: UUID) -> list[Beacon]:
