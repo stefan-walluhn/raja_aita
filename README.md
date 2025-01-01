@@ -10,4 +10,4 @@ Install and run test suite
     ./bin/pip install -c requirements.txt -e ".[test]"
     ./bin/pytest
     ./bin/flake8
-    ./bin/mypy --strict src
+    ./bin/mypy src

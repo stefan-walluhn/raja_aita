@@ -31,6 +31,11 @@ class TestDBusSignalReceiver:
         )
         state_manager.sleep.assert_not_called()
 
+    def test_call_with_zero_idle_since_hint(self, state_manager, receiver):
+        receiver(None, {"IdleHint": False, "IdleSinceHint": 0})
+
+        state_manager.wake_up.assert_not_called()
+
     def test_call_with_unknown_message(self, state_manager, receiver):
         receiver(None, {"Foo": "Bar"})
 

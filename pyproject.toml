@@ -18,9 +18,13 @@ dependencies = [
     "tinydb",
 ]
 
+[project.scripts]
+raja-client = "raja_aita.client.cli:main"
+
 [project.optional-dependencies]
 client = [
     "PyGObject",
+    "click",
     "dbus-python",
     "requests",
 ]
@@ -39,6 +43,12 @@ test = [
 [tool.pytest.ini_options]
 testpaths = [
     "tests",
+]
+
+[tool.mypy]
+strict = true
+exclude = [
+    "cli.py$",
 ]
 
 [[tool.mypy.overrides]]

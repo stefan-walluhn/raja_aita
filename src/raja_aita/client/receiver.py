@@ -18,6 +18,9 @@ class DBusSignalReceiver:
             if data["IdleHint"]:
                 self.state_manager.sleep()
             else:
+                if data["IdleSinceHint"] == 0:
+                    return
+
                 self.state_manager.wake_up(
                     datetime.fromtimestamp(
                         data["IdleSinceHint"] / 1000000, timezone.utc
