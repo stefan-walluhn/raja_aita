@@ -20,6 +20,8 @@ dependencies = [
 
 [project.optional-dependencies]
 client = [
+    "PyGObject",
+    "dbus-python",
     "requests",
 ]
 test = [
