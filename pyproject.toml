@@ -38,3 +38,7 @@ test = [
 testpaths = [
     "tests",
 ]
+
+[[tool.mypy.overrides]]
+module = ["dbus.*"]
+follow_untyped_imports = true
