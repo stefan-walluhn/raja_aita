@@ -1,6 +1,6 @@
-from typing import Annotated
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import UUID4
+from typing import Annotated
 
 from ..factories import RepositoryFactory
 from ..models import Beacon
@@ -26,7 +26,8 @@ async def patch_beacon(
     # XXX dedicated beacon_in?
     if uid != beacon.uid:
         raise HTTPException(
-            status_code=403, detail="uid of route does not match beacon"
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="uid of route does not match beacon",
         )
 
     repository.upsert_beacon(beacon)

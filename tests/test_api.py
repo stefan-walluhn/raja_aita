@@ -1,8 +1,7 @@
 import pytest
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from fastapi.testclient import TestClient
-from uuid import uuid4
-from zoneinfo import ZoneInfo
+from uuid import UUID
 
 from raja_aita.api import api
 from raja_aita.factories import RepositoryFactory
@@ -10,10 +9,15 @@ from raja_aita.models import Beacon
 
 
 @pytest.fixture
-def beacon():
+def uid():
+    return "ac147910-29cd-4c7a-aadc-41e6f93bbf2b"
+
+
+@pytest.fixture
+def beacon(uid):
     return Beacon(
-        uid=uuid4(),
-        dtstart=datetime(2024, 12, 23, 1, 2, 3, tzinfo=ZoneInfo("Europe/Berlin")),
+        uid=UUID(uid),
+        dtstart=datetime(2024, 12, 23, 1, 0, 0, tzinfo=timezone.utc),
         uptime=timedelta(hours=1),
     )
 
@@ -26,6 +30,13 @@ def repository():
 @pytest.fixture(autouse=True)
 def initialize_data(repository, beacon):
     repository.upsert_beacon(beacon)
+    repository.upsert_beacon(
+        Beacon(
+            uid=beacon.uid,
+            dtstart=datetime(2025, 1, 7, 20, 30, 40, tzinfo=timezone.utc),
+            uptime=timedelta(hours=2),
+        )
+    )
 
 
 @pytest.fixture
@@ -37,7 +48,7 @@ def test_get_beacons(client, beacon):
     response = client.get(f"/beacons/{beacon.uid}")
 
     assert response.status_code == 200
-    assert response.json() == [beacon.model_dump(mode="json")]
+    assert beacon.model_dump(mode="json") in response.json()
 
 
 def test_patch_beacons(repository, client, beacon):
@@ -48,10 +59,38 @@ def test_patch_beacons(repository, client, beacon):
     )
 
     assert response.status_code == 200
-    assert repository.find_beacons(beacon.uid) == [beacon]
+    assert beacon in repository.find_beacons(beacon.uid)
 
 
 def test_patch_beacons_with_unmatching_uid(client, beacon):
-    response = client.patch(f"/beacons/{uuid4()}", json=beacon.model_dump(mode="json"))
+    response = client.patch(
+        "/beacons/3b9da835-9aa1-4a76-b02d-d2f5b6dd9766",
+        json=beacon.model_dump(mode="json"),
+    )
 
     assert response.status_code == 403
+
+
+def test_get_summarize(client, uid):
+    response = client.get(f"/summarize/{uid}")
+
+    assert response.status_code == 200
+    assert response.json() == {"uid": uid, "uptime": 10800}
+
+
+def test_get_summerize_since(client, uid):
+    response = client.get(
+        f"/summarize/{uid}",
+        params={"since": datetime(2025, 1, 7, 0, 0, 0, tzinfo=timezone.utc)},
+    )
+
+    assert response.json() == {"uid": uid, "uptime": 7200}
+
+
+def test_get_summerize_since_after_dtstart(client, uid):
+    response = client.get(
+        f"/summarize/{uid}",
+        params={"since": datetime(2024, 12, 23, 1, 30, 0, tzinfo=timezone.utc)},
+    )
+
+    assert response.json() == {"uid": uid, "uptime": 9000}

@@ -10,3 +10,11 @@ class Beacon(BaseModel):
         datetime.timedelta,
         PlainSerializer(lambda x: x.seconds, return_type=int, when_used="json"),
     ]
+
+
+class Summary(BaseModel):
+    uid: UUID4
+    uptime: Annotated[
+        datetime.timedelta,
+        PlainSerializer(lambda x: x.seconds, return_type=int, when_used="json"),
+    ]
