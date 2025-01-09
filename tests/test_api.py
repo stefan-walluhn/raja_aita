@@ -94,3 +94,13 @@ def test_get_summerize_since_after_dtstart(client, uid):
     )
 
     assert response.json() == {"uid": uid, "uptime": 9000}
+
+
+def test_get_summerize_unknown_uid(client):
+    response = client.get("/summarize/06b1acb3-3f47-4962-91a2-9825b5133378")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "uid": "06b1acb3-3f47-4962-91a2-9825b5133378",
+        "uptime": 0,
+    }

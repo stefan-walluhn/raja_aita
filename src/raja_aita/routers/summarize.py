@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends
 from functools import reduce
 from pydantic import AwareDatetime, UUID4
@@ -26,7 +26,8 @@ async def get_summarize(
                 lambda b: b.dtstart + b.uptime >= since,
                 repository.find_beacons(uid)
             )
-        )
+        ),
+        timedelta(0)
     )
 
     return Summary(uid=uid, uptime=uptime)
