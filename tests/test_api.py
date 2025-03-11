@@ -104,3 +104,15 @@ def test_get_summerize_unknown_uid(client):
         "uid": "06b1acb3-3f47-4962-91a2-9825b5133378",
         "uptime": 0,
     }
+
+
+def test_delete_cleanup(repository, uid, client):
+    response = client.delete(
+        "/cleanup/", params={"since": datetime(2025, 1, 1, tzinfo=timezone.utc)}
+    )
+
+    assert response.status_code == 200
+    for bcn in client.get(f"/beacons/{uid}").json():
+        assert datetime.fromisoformat(bcn["dtstart"]) > datetime(
+            2025, 1, 1, tzinfo=timezone.utc
+        )

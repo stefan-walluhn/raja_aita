@@ -87,3 +87,15 @@ class TestTinyDBRepository:
         for result in results:
             assert isinstance(result, Beacon)
             assert result.uid == uid
+
+    def test_delete_beacons(self, db, repository):
+        beacon = Beacon(
+            uid=uuid4(),
+            dtstart=datetime(2025, 3, 8, 19, 12, tzinfo=ZoneInfo("Europe/Berlin")),
+            uptime=timedelta(hours=1),
+        )
+        db.insert(beacon.model_dump(mode="json"))
+
+        repository.delete_beacons([beacon])
+
+        assert repository.find_beacons(beacon.uid) == []

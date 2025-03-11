@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import UUID4
-from typing import Annotated
+from typing import Annotated, Iterable
 
 from ..factories import RepositoryFactory
 from ..models import Beacon
@@ -13,7 +13,7 @@ router = APIRouter()
 @router.get("/{uid}")
 async def get_beacons(
     uid: UUID4, repository: Annotated[Repository, Depends(RepositoryFactory())]
-) -> list[Beacon]:
+) -> Iterable[Beacon]:
     return repository.find_beacons(uid)
 
 
