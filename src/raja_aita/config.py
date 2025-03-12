@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="ra_")
 
     tinydb_path: Path | None = None
+    cleanup_username: str
+    cleanup_password: str
 
 
 @lru_cache

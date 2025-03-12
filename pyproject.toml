@@ -46,6 +46,7 @@ testpaths = [
 ]
 
 [tool.mypy]
+plugins = ['pydantic.mypy']
 strict = true
 exclude = [
     "cli.py$",

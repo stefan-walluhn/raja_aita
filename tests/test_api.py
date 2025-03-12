@@ -1,5 +1,6 @@
 import pytest
 from datetime import datetime, timedelta, timezone
+from fastapi import status
 from fastapi.testclient import TestClient
 from uuid import UUID
 
@@ -23,8 +24,8 @@ def beacon(uid):
 
 
 @pytest.fixture
-def repository():
-    return RepositoryFactory()()
+def repository(settings):
+    return RepositoryFactory()(settings)
 
 
 @pytest.fixture(autouse=True)
@@ -47,7 +48,7 @@ def client():
 def test_get_beacons(client, beacon):
     response = client.get(f"/beacons/{beacon.uid}")
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert beacon.model_dump(mode="json") in response.json()
 
 
@@ -58,7 +59,7 @@ def test_patch_beacons(repository, client, beacon):
         f"/beacons/{beacon.uid}", json=beacon.model_dump(mode="json")
     )
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert beacon in repository.find_beacons(beacon.uid)
 
 
@@ -68,13 +69,13 @@ def test_patch_beacons_with_unmatching_uid(client, beacon):
         json=beacon.model_dump(mode="json"),
     )
 
-    assert response.status_code == 403
+    assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 def test_get_summarize(client, uid):
     response = client.get(f"/summarize/{uid}")
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert response.json() == {"uid": uid, "uptime": 10800}
 
 
@@ -99,19 +100,29 @@ def test_get_summerize_since_after_dtstart(client, uid):
 def test_get_summerize_unknown_uid(client):
     response = client.get("/summarize/06b1acb3-3f47-4962-91a2-9825b5133378")
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
         "uid": "06b1acb3-3f47-4962-91a2-9825b5133378",
         "uptime": 0,
     }
 
 
-def test_delete_cleanup(repository, uid, client):
+def test_delete_cleanup_unauthenticated(client):
     response = client.delete(
-        "/cleanup/", params={"since": datetime(2025, 1, 1, tzinfo=timezone.utc)}
+        "/cleanup/", params={"since": datetime(1970, 1, 1, tzinfo=timezone.utc)}
     )
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_delete_cleanup(repository, uid, client):
+    response = client.delete(
+        "/cleanup/",
+        params={"since": datetime(2025, 1, 1, tzinfo=timezone.utc)},
+        auth=("username", "secret"),
+    )
+
+    assert response.status_code == status.HTTP_200_OK
     for bcn in client.get(f"/beacons/{uid}").json():
         assert datetime.fromisoformat(bcn["dtstart"]) > datetime(
             2025, 1, 1, tzinfo=timezone.utc

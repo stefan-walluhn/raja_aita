@@ -1,9 +1,9 @@
 from abc import ABCMeta, abstractmethod
 from tinydb import TinyDB, where
-from uuid import UUID
 from typing import Iterable, List
+from uuid import UUID
 
-from raja_aita.models import Beacon
+from .models import Beacon
 
 
 class Repository(metaclass=ABCMeta):

@@ -1,21 +1,22 @@
+from fastapi import Depends
 from tinydb import TinyDB
 from tinydb.storages import MemoryStorage
+from typing import Annotated
 
-from .config import get_settings
+from .config import Settings, get_settings
 from .repositories import Repository, TinyDBRepository
 
 
 class RepositoryFactory:
     _repository = None
 
-    def __init__(self) -> None:
-        self.settings = get_settings()
-
-    def __call__(self) -> Repository:
+    def __call__(
+        self, settings: Annotated[Settings, Depends(get_settings)]
+    ) -> Repository:
         # XXX not thread safe
         if RepositoryFactory._repository is None:
-            if self.settings.tinydb_path is not None:
-                db = TinyDB(self.settings.tinydb_path)
+            if settings.tinydb_path is not None:
+                db = TinyDB(settings.tinydb_path)
             else:
                 db = TinyDB(storage=MemoryStorage)
             RepositoryFactory._repository = TinyDBRepository(db)
