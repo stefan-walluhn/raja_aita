@@ -116,14 +116,15 @@ def test_delete_cleanup_unauthenticated(client):
 
 
 def test_delete_cleanup(repository, uid, client):
+    since = datetime(2025, 1, 1, tzinfo=timezone.utc)
     response = client.delete(
         "/cleanup/",
-        params={"since": datetime(2025, 1, 1, tzinfo=timezone.utc)},
+        params={"since": since},
         auth=("username", "secret"),
     )
 
     assert response.status_code == status.HTTP_200_OK
+    for bcn in response.json():
+        assert datetime.fromisoformat(bcn["dtstart"]) < since
     for bcn in client.get(f"/beacons/{uid}").json():
-        assert datetime.fromisoformat(bcn["dtstart"]) > datetime(
-            2025, 1, 1, tzinfo=timezone.utc
-        )
+        assert datetime.fromisoformat(bcn["dtstart"]) > since
