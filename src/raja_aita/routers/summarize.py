@@ -4,7 +4,7 @@ from functools import reduce
 from pydantic import AwareDatetime, UUID4
 from typing import Annotated
 
-from ..factories import RepositoryFactory
+from . import get_repository
 from ..models import Summary
 from ..repositories import Repository
 
@@ -16,7 +16,7 @@ router = APIRouter()
 @router.get("/{uid}")
 async def get_summarize(
     uid: UUID4,
-    repository: Annotated[Repository, Depends(RepositoryFactory())],
+    repository: Annotated[Repository, Depends(get_repository)],
     since: AwareDatetime = _DEFAULT_SINCE,
 ) -> Summary:
     uptime = reduce(

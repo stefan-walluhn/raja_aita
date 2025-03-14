@@ -2,12 +2,12 @@ import secrets
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import AwareDatetime
-from typing import Annotated, List
+from typing import Annotated, Iterable
 
-from ..config import Settings, get_settings
-from ..factories import RepositoryFactory
+from . import get_repository, get_settings
 from ..models import Beacon
 from ..repositories import Repository
+from ..settings import Settings
 
 
 router = APIRouter()
@@ -34,9 +34,9 @@ def validate_basic_auth(
 @router.delete("/")
 async def delete_cleanup(
     valid_basic_auth: Annotated[bool, Depends(validate_basic_auth)],
-    repository: Annotated[Repository, Depends(RepositoryFactory())],
+    repository: Annotated[Repository, Depends(get_repository)],
     since: AwareDatetime,
-) -> List[Beacon]:
+) -> Iterable[Beacon]:
     if not valid_basic_auth:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

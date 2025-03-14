@@ -6,7 +6,7 @@ from tinydb import TinyDB, where
 from tinydb.storages import MemoryStorage
 
 from raja_aita.models import Beacon
-from raja_aita.repositories import TinyDBRepository
+from raja_aita.repositories import Factory, TinyDBRepository
 
 
 class TestTinyDBRepository:
@@ -99,3 +99,11 @@ class TestTinyDBRepository:
         repository.delete_beacons([beacon])
 
         assert repository.find_beacons(beacon.uid) == []
+
+
+class TestFactory:
+    def test_call_returns_single_factory(self):
+        factory = Factory()
+        another_factory = Factory()
+
+        assert factory() is another_factory()

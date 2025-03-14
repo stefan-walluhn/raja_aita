@@ -1,6 +1,7 @@
 import pytest
-from raja_aita.config import Settings, get_settings
 from raja_aita.api import api
+from raja_aita.settings import Settings
+from raja_aita.routers import get_settings
 
 
 @pytest.fixture

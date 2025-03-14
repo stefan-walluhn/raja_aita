@@ -1,5 +1,7 @@
 from abc import ABCMeta, abstractmethod
+from pathlib import Path
 from tinydb import TinyDB, where
+from tinydb.storages import MemoryStorage
 from typing import Iterable, List
 from uuid import UUID
 
@@ -44,3 +46,21 @@ class TinyDBRepository(Repository):
             self.db.remove(
                 (where("uid") == b["uid"]) & (where("dtstart") == b["dtstart"])
             )
+
+
+class Factory:
+    _repository = None
+
+    def __init__(self, tinydb_path: Path | None = None):
+        self.tinydb_path = tinydb_path
+
+    def __call__(self) -> Repository:
+        # XXX not thread safe
+        if Factory._repository is None:
+            if self.tinydb_path is not None:
+                db = TinyDB(self.tinydb_path)
+            else:
+                db = TinyDB(storage=MemoryStorage)
+            Factory._repository = TinyDBRepository(db)
+
+        return Factory._repository

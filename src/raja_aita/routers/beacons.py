@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import UUID4
 from typing import Annotated, Iterable
 
-from ..factories import RepositoryFactory
+from . import get_repository
 from ..models import Beacon
 from ..repositories import Repository
 
@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.get("/{uid}")
 async def get_beacons(
-    uid: UUID4, repository: Annotated[Repository, Depends(RepositoryFactory())]
+    uid: UUID4, repository: Annotated[Repository, Depends(get_repository)]
 ) -> Iterable[Beacon]:
     return repository.find_beacons(uid)
 
@@ -21,7 +21,7 @@ async def get_beacons(
 async def patch_beacon(
     uid: UUID4,
     beacon: Beacon,
-    repository: Annotated[Repository, Depends(RepositoryFactory())],
+    repository: Annotated[Repository, Depends(get_repository)],
 ) -> Beacon:
     # XXX dedicated beacon_in?
     if uid != beacon.uid:

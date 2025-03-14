@@ -5,8 +5,8 @@ from fastapi.testclient import TestClient
 from uuid import UUID
 
 from raja_aita.api import api
-from raja_aita.factories import RepositoryFactory
 from raja_aita.models import Beacon
+from raja_aita.routers import get_repository
 
 
 @pytest.fixture
@@ -25,7 +25,7 @@ def beacon(uid):
 
 @pytest.fixture
 def repository(settings):
-    return RepositoryFactory()(settings)
+    return get_repository(settings)
 
 
 @pytest.fixture(autouse=True)
