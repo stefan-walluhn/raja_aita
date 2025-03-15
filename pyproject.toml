@@ -13,6 +13,7 @@ readme = "README.md"
 dependencies = [
     "fastapi",
     "fastapi-cli",
+    "httpx",
     "pydantic",
     "pydantic-settings",
     "tinydb",
@@ -34,7 +35,6 @@ test = [
     "flake8",
     "flake8-bugbear",
     "freezegun",
-    "httpx",
     "mypy",
     "pytest",
     "requests-mock",
