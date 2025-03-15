@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "raja_aita"
-version = "0.1.0"
+version = "0.1.1"
 authors = [
   { name="Stefan Walluhn", email="stefan@neuland.io" },
 ]
@@ -20,6 +20,7 @@ dependencies = [
 
 [project.scripts]
 raja-client = "raja_aita.client.cli:main"
+raja-cleanup = "raja_aita.maintenance:cleanup"
 
 [project.optional-dependencies]
 client = [

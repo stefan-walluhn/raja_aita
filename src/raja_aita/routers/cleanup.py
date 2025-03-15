@@ -43,7 +43,7 @@ async def delete_cleanup(
             headers={"WWW-Authenticate": "Basic"},
         )
 
-    beacons = filter(lambda b: b.dtstart + b.uptime < since, repository.all())
+    beacons = list(filter(lambda b: b.dtstart + b.uptime < since, repository.all()))
     repository.delete_beacons(beacons)
 
     return beacons

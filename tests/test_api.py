@@ -124,7 +124,8 @@ def test_delete_cleanup(repository, uid, client):
     )
 
     assert response.status_code == status.HTTP_200_OK
-    for bcn in response.json():
-        assert datetime.fromisoformat(bcn["dtstart"]) < since
+    assert response.json() == [
+        {"dtstart": "2024-12-23T01:00:00Z", "uid": str(uid), "uptime": 3600}
+    ]
     for bcn in client.get(f"/beacons/{uid}").json():
         assert datetime.fromisoformat(bcn["dtstart"]) > since
