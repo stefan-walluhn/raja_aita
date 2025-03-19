@@ -18,7 +18,7 @@ def cleanup(
 
     try:
         response = httpx.delete(
-            f"{ api_url }/cleanup/",
+            f"{api_url}/cleanup/",
             params={"since": clean_before.isoformat()},
             auth=(username, password),
         )
@@ -32,7 +32,7 @@ def cleanup(
 
     if verbose:
         click.secho(
-            f"Deleted beacons older than { clean_before.astimezone() }", fg="green"
+            f"Deleted beacons older than {clean_before.astimezone()}", fg="green"
         )
         for beacon in response.json():
             click.echo(beacon)
