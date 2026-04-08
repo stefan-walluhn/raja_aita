@@ -1,6 +1,7 @@
+from datetime import datetime, timedelta, timezone
+
 import click
 import httpx
-from datetime import datetime, timedelta, timezone
 
 
 @click.command()
@@ -21,6 +22,7 @@ def cleanup(
             f"{api_url}/cleanup/",
             params={"since": clean_before.isoformat()},
             auth=(username, password),
+            timeout=59,
         )
     except Exception as e:
         click.secho(e, fg="red")
