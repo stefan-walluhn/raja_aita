@@ -13,7 +13,7 @@ readme = "README.md"
 dependencies = [
     "fastapi",
     "fastapi-cli",
-    "httpx",
+    "httpx2",
     "pydantic",
     "pydantic-settings",
     "tinydb",

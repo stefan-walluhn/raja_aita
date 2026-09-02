@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
 import click
-import httpx
+import httpx2
 
 
 @click.command()
@@ -18,7 +18,7 @@ def cleanup(
     clean_before = datetime.now(tz=timezone.utc) - timedelta(days=days)
 
     try:
-        response = httpx.delete(
+        response = httpx2.delete(
             f"{api_url}/cleanup/",
             params={"since": clean_before.isoformat()},
             auth=(username, password),
