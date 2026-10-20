@@ -1,4 +1,5 @@
-name: "Test and lint"
+---
+name: "test & lint"
 
 on:
   push:
@@ -11,26 +12,24 @@ permissions:
 
 jobs:
   test_and_lint:
-
     runs-on: "ubuntu-latest"
-
     steps:
-      - name: "Install dependencies"
-        run: |
-          sudo apt-get update
-          sudo apt-get install libgirepository-2.0-dev libcairo2-dev libglib2.0-dev libdbus-1-dev
-      - uses: "actions/checkout@v4"
-      - uses: "actions/setup-python@v5"
+      - uses: "actions/checkout@v7"
+
+      - uses: "actions/setup-python@v7"
         with:
-          python-version: "3.12"
-          cache: "pip"
+          python-version: "3.13"
+
+      - uses: "astral-sh/setup-uv@v10.2.0"
+
       - name: "Install dependencies"
-        run: |
-          python -m pip install --upgrade pip
-          pip install -c requirements.txt -e ".[test]"
-      - name: "Lint with flake8"
-        run: "flake8" 
-      - name: "Check types with mypy"
-        run: "mypy --strict src"
-      - name: "Test with pytest"
-        run: "pytest"
+        run: "uv sync --locked --dev --extra client"
+
+      - name: "Run linter"
+        run: "uv run ruff check"
+
+      - name: "Run type checker"
+        run: "uv run pyrefly check"
+
+      - name: "Run tests"
+        run: "uv run pytest"

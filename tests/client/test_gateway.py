@@ -21,7 +21,7 @@ class TestGateway:
 
     def test_patch_beacon(self, requests_mock, gateway, beacon):
         (uid,) = beacon.model_dump(mode="json", include=["uid"]).values()
-        requests_mock.patch("/".join([gateway.url, "beacons", uid]))
+        requests_mock.patch(f"{gateway.url}/beacons/{uid}")
 
         gateway.patch_beacon(beacon)
 
@@ -31,7 +31,7 @@ class TestGateway:
     def test_patch_beacon_request_error(self, caplog, requests_mock, gateway, beacon):
         (uid,) = beacon.model_dump(mode="json", include=["uid"]).values()
         requests_mock.patch(
-            "/".join([gateway.url, "beacons", uid]),
+            f"{gateway.url}/beacons/{uid}",
             exc=RequestException("something went wrng"),
         )
 

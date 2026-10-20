@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+requires = ["uv_build>=0.12.17,<0.13.0"]
+build-backend = "uv_build"
 
 [project]
 name = "raja_aita"
@@ -30,29 +30,35 @@ client = [
     "dbus-python",
     "requests",
 ]
-test = [
+
+[dependency-groups]
+dev = [
     "raja_aita[client]",
     "flake8",
     "flake8-bugbear",
     "freezegun",
-    "mypy",
     "pytest",
     "requests-mock",
     "types-requests",
+    "ruff>=0.17.1",
+    "pyrefly>=1.4.0",
 ]
+
+[tool.fastapi]
+entrypoint = "raja_aita.api:api"
+
+[tool.uv]
+python-downloads = "never"
+python-preference = "system"
 
 [tool.pytest.ini_options]
 testpaths = [
     "tests",
 ]
 
-[tool.mypy]
-plugins = ['pydantic.mypy']
-strict = true
-exclude = [
-    "cli.py$",
+[tool.pyrefly]
+preset = "strict"
+project-includes = [
+    "src/**/*.py*",
 ]
-
-[[tool.mypy.overrides]]
-module = ["dbus.*"]
-follow_untyped_imports = true
+ignore-missing-imports = ["gi.*"]

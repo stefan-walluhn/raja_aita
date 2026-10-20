@@ -50,7 +50,7 @@ class TinyDBRepository(Repository):
 
 
 class Factory:
-    _repository = None
+    _repository: Repository | None = None
 
     def __init__(self, tinydb_path: Path | None = None):
         self.tinydb_path = tinydb_path

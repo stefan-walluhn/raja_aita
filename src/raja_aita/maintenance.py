@@ -24,7 +24,7 @@ def cleanup(
             auth=(username, password),
             timeout=59,
         )
-    except Exception as e:
+    except httpx2.HTTPError as e:
         click.secho(e, fg="red")
         raise click.Abort()
 

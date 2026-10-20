@@ -22,12 +22,9 @@ async def get_summarize(
 ) -> Summary:
     uptime = reduce(
         lambda x, y: x + y,
-        map(
-            lambda b: b.uptime if b.dtstart > since else since - b.dtstart,
-            filter(
+        (b.uptime if b.dtstart > since else since - b.dtstart for b in filter(
                 lambda b: b.dtstart + b.uptime >= since, repository.find_beacons(uid)
-            ),
-        ),
+            )),
         timedelta(0),
     )
 
