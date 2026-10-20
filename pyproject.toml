@@ -19,6 +19,7 @@ dependencies = [
     "pydantic",
     "pydantic-settings",
     "tinydb",
+    "uvicorn>=0.54.0",
 ]
 
 [project.scripts]

@@ -734,6 +734,7 @@ dependencies = [
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "tinydb" },
+    { name = "uvicorn" },
 ]
 
 [package.optional-dependencies]
@@ -769,6 +770,7 @@ requires-dist = [
     { name = "pygobject", marker = "extra == 'client'" },
     { name = "requests", marker = "extra == 'client'" },
     { name = "tinydb" },
+    { name = "uvicorn", specifier = ">=0.54.0" },
 ]
 provides-extras = ["client"]
 
