@@ -1,14 +1,15 @@
 import secrets
+from collections.abc import Iterable
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import AwareDatetime
-from typing import Annotated, Iterable
 
-from . import get_repository, get_settings
 from ..models import Beacon
 from ..repositories import Repository
 from ..settings import Settings
-
+from . import get_repository, get_settings
 
 router = APIRouter()
 

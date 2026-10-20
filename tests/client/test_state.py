@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from freezegun import freeze_time
 
 from raja_aita.client.state import State, StateManager

@@ -1,11 +1,12 @@
+from collections.abc import Iterable
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import UUID4
-from typing import Annotated, Iterable
 
-from . import get_repository
 from ..models import Beacon
 from ..repositories import Repository
-
+from . import get_repository
 
 router = APIRouter()
 

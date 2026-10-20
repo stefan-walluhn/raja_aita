@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 
-from .routers import beacons, summarize, cleanup
-
+from .routers import beacons, cleanup, summarize
 
 api = FastAPI()
 

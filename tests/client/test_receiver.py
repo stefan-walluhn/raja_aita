@@ -1,7 +1,8 @@
-import pytest
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from unittest.mock import Mock
 from uuid import uuid4
+
+import pytest
 
 from raja_aita.client.gateway import Gateway
 from raja_aita.client.receiver import DBusSignalReceiver, TimerReceiver
@@ -27,7 +28,7 @@ class TestDBusSignalReceiver:
         receiver(None, {"IdleHint": False, "IdleSinceHint": 1735741149885606})
 
         state_manager.wake_up.assert_called_once_with(
-            datetime(2025, 1, 1, 14, 19, 9, 885606, tzinfo=timezone.utc)
+            datetime(2025, 1, 1, 14, 19, 9, 885606, tzinfo=UTC)
         )
         state_manager.sleep.assert_not_called()
 
@@ -50,7 +51,7 @@ class TestTimerReciver:
 
     @pytest.fixture
     def state(self):
-        return State(is_awake=True, awake_since=datetime.now(tz=timezone.utc))
+        return State(is_awake=True, awake_since=datetime.now(tz=UTC))
 
     @pytest.fixture
     def receiver(self, state, gateway):

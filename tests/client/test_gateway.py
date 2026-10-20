@@ -1,11 +1,11 @@
-import pytest
-
 from datetime import datetime, timedelta
-from requests.exceptions import RequestException
 from uuid import uuid4
 
-from raja_aita.models import Beacon
+import pytest
+from requests.exceptions import RequestException
+
 from raja_aita.client.gateway import Gateway
+from raja_aita.models import Beacon
 
 
 class TestGateway:

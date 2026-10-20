@@ -1,13 +1,13 @@
-import click
+from datetime import UTC, datetime
 
-from datetime import datetime, timezone
+import click
 from dbus import SystemBus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib
 
 from .gateway import Gateway
-from .state import State, StateManager
 from .receiver import DBusSignalReceiver, TimerReceiver
+from .state import State, StateManager
 
 
 @click.command()
@@ -16,7 +16,7 @@ from .receiver import DBusSignalReceiver, TimerReceiver
 @click.argument("uid", type=click.UUID)
 def main(api_url, interval, uid):
     gateway = Gateway(api_url)
-    state = State(is_awake=True, awake_since=datetime.now(tz=timezone.utc))
+    state = State(is_awake=True, awake_since=datetime.now(tz=UTC))
     dbus_receiver = DBusSignalReceiver(StateManager(state))
     timer_receiver = TimerReceiver(uid, state, gateway)
 

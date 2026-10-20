@@ -1,14 +1,15 @@
-from datetime import datetime, timedelta, timezone
-from fastapi import APIRouter, Depends
+from datetime import UTC, datetime, timedelta
 from functools import reduce
-from pydantic import AwareDatetime, UUID4
 from typing import Annotated
 
-from . import get_repository
+from fastapi import APIRouter, Depends
+from pydantic import UUID4, AwareDatetime
+
 from ..models import Summary
 from ..repositories import Repository
+from . import get_repository
 
-_DEFAULT_SINCE = datetime.fromtimestamp(0, tz=timezone.utc)
+_DEFAULT_SINCE = datetime.fromtimestamp(0, tz=UTC)
 
 router = APIRouter()
 

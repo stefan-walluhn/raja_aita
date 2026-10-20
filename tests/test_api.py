@@ -1,8 +1,9 @@
+from datetime import UTC, datetime, timedelta
+from uuid import UUID
+
 import pytest
-from datetime import datetime, timedelta, timezone
 from fastapi import status
 from fastapi.testclient import TestClient
-from uuid import UUID
 
 from raja_aita.api import api
 from raja_aita.models import Beacon
@@ -18,7 +19,7 @@ def uid():
 def beacon(uid):
     return Beacon(
         uid=UUID(uid),
-        dtstart=datetime(2024, 12, 23, 1, 0, 0, tzinfo=timezone.utc),
+        dtstart=datetime(2024, 12, 23, 1, 0, 0, tzinfo=UTC),
         uptime=timedelta(hours=1),
     )
 
@@ -34,7 +35,7 @@ def initialize_data(repository, beacon):
     repository.upsert_beacon(
         Beacon(
             uid=beacon.uid,
-            dtstart=datetime(2025, 1, 7, 20, 30, 40, tzinfo=timezone.utc),
+            dtstart=datetime(2025, 1, 7, 20, 30, 40, tzinfo=UTC),
             uptime=timedelta(hours=2),
         )
     )
@@ -82,7 +83,7 @@ def test_get_summarize(client, uid):
 def test_get_summerize_since(client, uid):
     response = client.get(
         f"/summarize/{uid}",
-        params={"since": datetime(2025, 1, 7, 0, 0, 0, tzinfo=timezone.utc)},
+        params={"since": datetime(2025, 1, 7, 0, 0, 0, tzinfo=UTC)},
     )
 
     assert response.json() == {"uid": uid, "uptime": 7200}
@@ -91,7 +92,7 @@ def test_get_summerize_since(client, uid):
 def test_get_summerize_since_after_dtstart(client, uid):
     response = client.get(
         f"/summarize/{uid}",
-        params={"since": datetime(2024, 12, 23, 1, 30, 0, tzinfo=timezone.utc)},
+        params={"since": datetime(2024, 12, 23, 1, 30, 0, tzinfo=UTC)},
     )
 
     assert response.json() == {"uid": uid, "uptime": 9000}
@@ -109,14 +110,14 @@ def test_get_summerize_unknown_uid(client):
 
 def test_delete_cleanup_unauthenticated(client):
     response = client.delete(
-        "/cleanup/", params={"since": datetime(1970, 1, 1, tzinfo=timezone.utc)}
+        "/cleanup/", params={"since": datetime(1970, 1, 1, tzinfo=UTC)}
     )
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 def test_delete_cleanup(repository, uid, client):
-    since = datetime(2025, 1, 1, tzinfo=timezone.utc)
+    since = datetime(2025, 1, 1, tzinfo=UTC)
     response = client.delete(
         "/cleanup/",
         params={"since": since},
