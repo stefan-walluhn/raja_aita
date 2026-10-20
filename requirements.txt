@@ -7,7 +7,7 @@ certifi==2026.7.22
 charset-normalizer==3.5.1
 click==8.5.0
 dbus-python==1.4.0
-fastapi==0.141.1
+fastapi==0.143.0
 fastapi-cli==0.0.32
 flake8==7.3.0
 flake8-bugbear==25.11.29
