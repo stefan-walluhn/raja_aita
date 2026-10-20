@@ -1,8 +1,8 @@
 import logging
+
 import requests
 
 from raja_aita.models import Beacon
-
 
 logger = logging.getLogger(__name__)
 

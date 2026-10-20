@@ -1,11 +1,12 @@
-import dbus
-from datetime import datetime, timezone
-from pydantic import UUID4
+from datetime import UTC, datetime
 from typing import Any
 
+import dbus
+from pydantic import UUID4
+
 from ..models import Beacon
-from .state import State, StateManager
 from .gateway import Gateway
+from .state import State, StateManager
 
 
 class DBusSignalReceiver:
@@ -23,7 +24,7 @@ class DBusSignalReceiver:
 
                 self.state_manager.wake_up(
                     datetime.fromtimestamp(
-                        data["IdleSinceHint"] / 1000000, timezone.utc
+                        data["IdleSinceHint"] / 1000000, UTC
                     )
                 )
 
@@ -42,7 +43,7 @@ class TimerReceiver:
             beacon = Beacon(
                 uid=self.uid,
                 dtstart=self.state.awake_since,
-                uptime=datetime.now(tz=timezone.utc) - self.state.awake_since,
+                uptime=datetime.now(tz=UTC) - self.state.awake_since,
             )
             self.gateway.patch_beacon(beacon)
 

@@ -1,6 +1,7 @@
 import datetime
-from pydantic import BaseModel, AwareDatetime, UUID4, PlainSerializer
-from typing_extensions import Annotated
+from typing import Annotated
+
+from pydantic import UUID4, AwareDatetime, BaseModel, PlainSerializer
 
 
 class Beacon(BaseModel):

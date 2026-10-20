@@ -1,9 +1,10 @@
 from abc import ABCMeta, abstractmethod
+from collections.abc import Iterable
 from pathlib import Path
+from uuid import UUID
+
 from tinydb import TinyDB, where
 from tinydb.storages import MemoryStorage
-from typing import Iterable, List
-from uuid import UUID
 
 from .models import Beacon
 
@@ -26,7 +27,7 @@ class TinyDBRepository(Repository):
     def __init__(self, db: TinyDB):
         self.db = db
 
-    def all(self) -> List[Beacon]:
+    def all(self) -> list[Beacon]:
         return [Beacon(**data) for data in self.db.all()]
 
     def upsert_beacon(self, beacon: Beacon) -> None:
@@ -38,7 +39,7 @@ class TinyDBRepository(Repository):
             & (where("dtstart") == dumped_beacon["dtstart"]),
         )
 
-    def find_beacons(self, uid: UUID) -> List[Beacon]:
+    def find_beacons(self, uid: UUID) -> list[Beacon]:
         return [Beacon(**data) for data in self.db.search(where("uid") == str(uid))]
 
     def delete_beacons(self, beacons: Iterable[Beacon]) -> None:
@@ -49,7 +50,7 @@ class TinyDBRepository(Repository):
 
 
 class Factory:
-    _repository = None
+    _repository: Repository | None = None
 
     def __init__(self, tinydb_path: Path | None = None):
         self.tinydb_path = tinydb_path

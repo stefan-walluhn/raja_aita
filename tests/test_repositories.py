@@ -1,7 +1,8 @@
-import pytest
-from uuid import uuid4
 from datetime import datetime, timedelta
+from uuid import uuid4
 from zoneinfo import ZoneInfo
+
+import pytest
 from tinydb import TinyDB, where
 from tinydb.storages import MemoryStorage
 

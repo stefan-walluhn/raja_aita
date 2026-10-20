@@ -1,5 +1,6 @@
 from datetime import datetime
-from pydantic import BaseModel, AwareDatetime
+
+from pydantic import AwareDatetime, BaseModel
 
 
 class State(BaseModel):

@@ -1,8 +1,10 @@
-from fastapi import Depends
 from functools import lru_cache
 from typing import Annotated
 
-from ..repositories import Repository, Factory as RepositoryFactory
+from fastapi import Depends
+
+from ..repositories import Factory as RepositoryFactory
+from ..repositories import Repository
 from ..settings import Settings
 
 

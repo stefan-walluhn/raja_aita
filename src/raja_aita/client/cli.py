@@ -1,22 +1,23 @@
-import click
+from datetime import UTC, datetime
 
-from datetime import datetime, timezone
+import click
 from dbus import SystemBus
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib
+from pydantic.types import UUID4
 
 from .gateway import Gateway
-from .state import State, StateManager
 from .receiver import DBusSignalReceiver, TimerReceiver
+from .state import State, StateManager
 
 
 @click.command()
 @click.option("-a", "--api-url", default="http://127.0.0.1:8000", help="API URL")
 @click.option("-i", "--interval", type=int, default=60)
 @click.argument("uid", type=click.UUID)
-def main(api_url, interval, uid):
+def main(api_url: str, interval: int, uid: UUID4) -> None:
     gateway = Gateway(api_url)
-    state = State(is_awake=True, awake_since=datetime.now(tz=timezone.utc))
+    state = State(is_awake=True, awake_since=datetime.now(tz=UTC))
     dbus_receiver = DBusSignalReceiver(StateManager(state))
     timer_receiver = TimerReceiver(uid, state, gateway)
 

@@ -1,11 +1,11 @@
-import pytest
-
 from datetime import datetime, timedelta
-from requests.exceptions import RequestException
 from uuid import uuid4
 
-from raja_aita.models import Beacon
+import pytest
+from requests.exceptions import RequestException
+
 from raja_aita.client.gateway import Gateway
+from raja_aita.models import Beacon
 
 
 class TestGateway:
@@ -21,7 +21,7 @@ class TestGateway:
 
     def test_patch_beacon(self, requests_mock, gateway, beacon):
         (uid,) = beacon.model_dump(mode="json", include=["uid"]).values()
-        requests_mock.patch("/".join([gateway.url, "beacons", uid]))
+        requests_mock.patch(f"{gateway.url}/beacons/{uid}")
 
         gateway.patch_beacon(beacon)
 
@@ -31,7 +31,7 @@ class TestGateway:
     def test_patch_beacon_request_error(self, caplog, requests_mock, gateway, beacon):
         (uid,) = beacon.model_dump(mode="json", include=["uid"]).values()
         requests_mock.patch(
-            "/".join([gateway.url, "beacons", uid]),
+            f"{gateway.url}/beacons/{uid}",
             exc=RequestException("something went wrng"),
         )
 
