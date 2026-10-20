@@ -49,7 +49,7 @@ starlette==1.6.0
 tinydb==4.9.0
 truststore==0.10.4
 typer==0.27.2
-types-requests==2.33.0.20260712
+types-requests==2.33.0.20261006
 typing-inspection==0.4.4
 typing_extensions==4.16.0
 urllib3==2.7.0
